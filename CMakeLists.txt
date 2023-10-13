@@ -9,23 +9,23 @@ project(libzip
   VERSION 1.10.1
   LANGUAGES C)
 
-option(ENABLE_COMMONCRYPTO "Enable use of CommonCrypto" ON)
-option(ENABLE_GNUTLS "Enable use of GnuTLS" ON)
-option(ENABLE_MBEDTLS "Enable use of mbed TLS" ON)
-option(ENABLE_OPENSSL "Enable use of OpenSSL" ON)
-option(ENABLE_WINDOWS_CRYPTO "Enable use of Windows cryptography libraries" ON)
+option(ENABLE_COMMONCRYPTO "Enable use of CommonCrypto" OFF)
+option(ENABLE_GNUTLS "Enable use of GnuTLS" OFF)
+option(ENABLE_MBEDTLS "Enable use of mbed TLS" OFF)
+option(ENABLE_OPENSSL "Enable use of OpenSSL" OFF)
+option(ENABLE_WINDOWS_CRYPTO "Enable use of Windows cryptography libraries" OFF)
 
-option(ENABLE_BZIP2 "Enable use of BZip2" ON)
-option(ENABLE_LZMA "Enable use of LZMA" ON)
-option(ENABLE_ZSTD "Enable use of Zstandard" ON)
+option(ENABLE_BZIP2 "Enable use of BZip2" OFF)
+option(ENABLE_LZMA "Enable use of LZMA" OFF)
+option(ENABLE_ZSTD "Enable use of Zstandard" OFF)
 
-option(ENABLE_FDOPEN "Enable zip_fdopen, which is not allowed in Microsoft CRT secure libraries" ON)
+option(ENABLE_FDOPEN "Enable zip_fdopen, which is not allowed in Microsoft CRT secure libraries" OFF)
 
-option(BUILD_TOOLS "Build tools in the src directory (zipcmp, zipmerge, ziptool)" ON)
-option(BUILD_REGRESS "Build regression tests" ON)
-option(BUILD_OSSFUZZ "Build fuzzers for ossfuzz" ON)
-option(BUILD_EXAMPLES "Build examples" ON)
-option(BUILD_DOC "Build documentation" ON)
+option(BUILD_TOOLS "Build tools in the src directory (zipcmp, zipmerge, ziptool)" OFF)
+option(BUILD_REGRESS "Build regression tests" OFF)
+option(BUILD_OSSFUZZ "Build fuzzers for ossfuzz" OFF)
+option(BUILD_EXAMPLES "Build examples" OFF)
+option(BUILD_DOC "Build documentation" OFF)
 
 include(CheckFunctionExists)
 include(CheckIncludeFiles)
@@ -191,7 +191,10 @@ int main(int argc, char *argv[]) { }" HAVE_NULLABLE)
 
 test_big_endian(WORDS_BIGENDIAN)
 
-find_package(ZLIB 1.1.2 REQUIRED)
+# automatically get the correct zlib version using FetchContent
+find_package(zlib 1.1.2 REQUIRED)
+include_directories(${zlib_INCLUDE_DIR})
+
 # so developers on systems where zlib is named differently (Windows, sometimes)
 # can override the name used in the pkg-config file
 if (NOT ZLIB_LINK_LIBRARY_NAME)
